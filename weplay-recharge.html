@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WePlay · Recharge</title>
+<style>
+  :root{
+    --brand-cyan:#12C7D6;
+    --brand-cyan-dark:#0AA3B0;
+    --ink:#1B2430;
+    --ink-soft:#6B7684;
+    --bg:#F4F6F7;
+    --card:#FFFFFF;
+    --card-alt:#FDF1E4;
+    --price:#FF7A1A;
+    --purple-tag:#8B6EF5;
+    --pink-tag:#FF6FA0;
+    --line:#ECEEF0;
+    --gift-glow:#FFB6D5;
+
+    /* ---------------------------------------------------------------
+       DROP YOUR OWN IMAGES HERE.
+       Replace `none` with url('your-image.jpg') (or a relative path,
+       e.g. url('images/banner.jpg')). Each spot has a safe fallback
+       (gradient/SVG/emoji) so nothing breaks if left as `none`.
+       ----------------------------------------------------------------*/
+    --page-bg-image:none;              /* whole page background */
+    --first-recharge-bg:none;          /* the teal "First Recharge Benefits" banner */
+    --first-recharge-mascot:none;      /* mascot image inside that banner */
+    --gift-float-image:none;           /* floating gift-pack badge, bottom right */
+    --brand-mark-image:none;           /* small logo tile top-left */
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color:var(--bg);
+    background-image:var(--page-bg-image);
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* fake browser chrome */
+  /* .browser-bar{
+    background:#111417;
+    color:#cfd3d8;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 14px;
+    font-size:15px;
+  }
+  .browser-bar .url{
+    flex:1;
+    background:#1f2327;
+    border-radius:20px;
+    padding:8px 14px;
+    color:#e5e7ea;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .browser-bar .url svg{flex:none;opacity:.8} */
+
+  .app-shell{
+    max-width:480px;
+    margin:0 auto;
+    background:var(--bg);
+    min-height:100vh;
+    position:relative;
+  }
+
+  /* header */
+  header.top{
+    background:var(--card);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 18px;
+    border-bottom:1px solid var(--line);
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .brand-mark{
+    width:44px;height:44px;border-radius:14px;
+    /* background-color:#FFE24C; */
+    background-image:url("dp.jpeg");
+    background-size:cover;
+    background-position:center;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:inset 0 -3px 0 rgba(0,0,0,.08);
+  }
+  /* .brand-mark svg{width:26px;height:26px;} */
+  .brand-name{
+    font-size:26px;
+    font-weight:800;
+    letter-spacing:-0.5px;
+    color:var(--ink);
+    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    /* background-image: url('brand_name.png'); */
+  }
+  /* .menu-btn, .close-btn{
+    background:none;border:none;cursor:pointer;
+    color:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    width:36px;height:36px;
+  }
+
+  /* slide-out nav 
+  nav.side-nav{
+    position:fixed;
+    inset:0;
+    background:var(--card);
+    max-width:480px;
+    margin:0 auto;
+    transform:translateX(100%);
+    transition:transform .28s ease;
+    z-index:50;
+    display:flex;
+    flex-direction:column;
+  }
+  nav.side-nav.open{transform:translateX(0);}
+  nav.side-nav .nav-head{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 18px;border-bottom:1px solid var(--line);
+  }
+  nav.side-nav ul{list-style:none;margin:0;padding:8px 18px;}
+  nav.side-nav li{
+    padding:20px 0;
+    font-size:19px;
+    font-weight:700;
+    border-bottom:1px solid var(--line);
+  }
+  nav.side-nav .lang{
+    margin-top:auto;
+    padding:20px 18px;
+    border-top:1px solid var(--line);
+    color:var(--brand-cyan-dark);
+    font-weight:700;
+    font-size:16px;
+  } */
+
+  /* profile row */
+  /* .profile-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 18px 6px;
+  }
+  .profile-left{display:flex;align-items:center;gap:12px;}
+  .avatar{
+    width:52px;height:52px;border-radius:50%;
+    object-fit:cover;
+    border:2px solid var(--card);
+    box-shadow:0 0 0 2px var(--brand-cyan);
+  }
+  .profile-name{font-size:19px;font-weight:800;}
+  .profile-charm{font-size:14px;color:var(--ink-soft);margin-top:2px;}
+  .swap-btn{
+    width:38px;height:38px;border-radius:50%;
+    border:1.5px solid var(--brand-cyan);
+    color:var(--brand-cyan-dark);
+    display:flex;align-items:center;justify-content:center;
+    background:var(--card);
+  } */
+
+  /* first recharge banner */
+  .first-recharge{
+    margin:14px 18px 0;
+    border-radius:18px;
+    padding:20px;
+    /* Fallback gradient shows until you set a background image below */
+    /* background:linear-gradient(120deg,#17D6E0 0%,#12B8C9 55%,#0FA0B4 100%); */
+    background-image:url(coursel1.jpeg);
+    background-size:cover;
+    background-position:center;
+    color:#fff;
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 8px 20px -8px rgba(18,199,214,.6);
+    cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .first-recharge:hover{
+    transform:translateY(-2px);
+    box-shadow:0 12px 26px -8px rgba(18,199,214,.75);
+  }
+  .first-recharge:active{
+    transform:translateY(0) scale(.99);
+  }
+  .first-recharge::after{
+    content:"";
+    position:absolute;
+    right:-30px;top:-40px;
+    width:150px;height:150px;
+    background:radial-gradient(circle, rgba(255,255,255,.25), transparent 70%);
+  }
+  .first-recharge h2{
+    margin:0 0 2px;
+    font-size:22px;
+    font-weight:800;
+    line-height:1.15;
+  }
+  .first-recharge p.sub{
+    margin:0 0 16px;
+    font-size:14px;
+    opacity:.92;
+  }
+
+
+.carousel{
+  margin:14px 18px 0;
+  border-radius:18px;
+  height:190px;                 /* matches the banner's height */
+  position:relative;
+  overflow:hidden;
+  cursor:pointer;
+  box-shadow:0 8px 20px -8px rgba(18,199,214,.6);
+}
+.carousel-track{
+  display:flex;
+  height:100%;
+  transition:transform .4s ease;
+}
+
+
+
+.carousel-slide{
+  flex:0 0 100%;
+  height:100%;
+  background-color:#12B8C9;   /* letterbox fill if the image is a different ratio */
+  overflow:hidden;
+}
+.carousel-slide img{
+  width:100%;
+  height:100%;
+  object-fit:cover;      /* fills the box, crops edges evenly — use this for photos */
+  /* object-fit:contain; ← use this instead if you'd rather see the WHOLE image
+     with no cropping (may show empty bars on the sides) */
+  object-position:center;
+  display:block;
+}
+
+
+
+
+
+/* .carousel-slide{
+  flex:0 0 100%;
+  height:100%;
+  /* background-size:cover;
+  background-position:center; 
+  background-color:#12B8C9;     /* fallback while you add your own images 
+} */
+.carousel-dots{
+  position:absolute;
+  bottom:10px;
+  left:0;right:0;
+  display:flex;
+  justify-content:center;
+  gap:6px;
+}
+.carousel-dots .dot{
+  width:6px;height:6px;
+  border-radius:50%;
+  background:rgba(255,255,255,.5);
+  transition:width .25s ease, background .25s ease;
+}
+.carousel-dots .dot.active{
+  width:18px;
+  border-radius:4px;
+  background:#fff;
+}
+
+  /* .fr-perks{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    font-size:13px;
+    font-weight:700;
+  }
+  .fr-perks span{display:flex;align-items:center;gap:5px;}
+  .fr-perks .plus{opacity:.85;font-weight:400;}
+  .fr-mascot{
+    position:absolute;
+    right:14px;
+    bottom:8px;
+    width:78px;height:78px;
+    background-image:var(--first-recharge-mascot);
+    background-size:contain;
+    background-repeat:no-repeat;
+    background-position:center;
+  } */
+
+  /* tabs */
+  .tabs{
+    display:flex;
+    gap:26px;
+    padding:20px 18px 0;
+  }
+  .tab{
+    font-size:17px;
+    font-weight:700;
+    color:var(--ink-soft);
+    padding-bottom:10px;
+    position:relative;
+    cursor:pointer;
+    background:none;border:none;
+  }
+  .tab.active{color:var(--ink);}
+  .tab.active::after{
+    content:"";
+    position:absolute;
+    left:0;bottom:0;
+    width:22px;height:3px;
+    border-radius:3px;
+    background:var(--brand-cyan);
+  }
+  .tab-underline{
+    height:1px;background:var(--line);
+    margin:0 18px;
+  }
+
+  /* gold grid */
+  .gold-list{
+    padding:16px 18px 100px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .gold-card{
+    background:var(--card);
+    border-radius:16px;
+    padding:16px;
+    display:flex;
+    align-items:center;
+    gap:16px;
+    border:1px solid var(--line);
+    position:relative;
+    cursor:pointer;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .gold-card:active{transform:scale(.98);}
+  .gold-card.featured{
+    background:var(--card-alt);
+    border-color:#F6DCB8;
+  }
+  .gold-card.best-value{
+    border:1.5px solid var(--price);
+    box-shadow:0 6px 18px -10px rgba(255,122,26,.5);
+  }
+  .icon-wrap{
+    width:64px;height:64px;
+    flex:none;
+    display:flex;align-items:center;justify-content:center;
+    position:relative;
+  }
+  .icon-wrap svg{width:56px;height:56px;}
+  .bonus-tag{
+    position:absolute;
+    bottom:-6px;left:50%;
+    transform:translateX(-50%);
+    background:linear-gradient(90deg,#FF8A3D,#FF5F5F);
+    color:#fff;
+    font-size:11px;
+    font-weight:800;
+    padding:2px 8px;
+    border-radius:10px;
+    white-space:nowrap;
+    box-shadow:0 2px 4px rgba(0,0,0,.15);
+  }
+  .bonus-tag.purple{background:linear-gradient(90deg,#8B6EF5,#6E5CE7);}
+  .combo-badge{
+    position:absolute;
+    top:-6px;left:2px;
+    background:#FFE1E1;
+    color:#E4442B;
+    font-size:11px;
+    font-weight:800;
+    padding:1px 6px;
+    border-radius:8px;
+    display:flex;align-items:center;gap:2px;
+  }
+  .gold-info{flex:1;}
+  .gold-name{font-size:18px;font-weight:800;}
+  .gold-price{
+    font-size:19px;
+    font-weight:800;
+    color:var(--price);
+  }
+  .best-flag{
+    position:absolute;
+    top:-10px;right:12px;
+    background:var(--price);
+    color:#fff;
+    font-size:11px;
+    font-weight:800;
+    padding:3px 10px;
+    border-radius:0 0 8px 8px;
+  }
+
+  /* floating gift pack */
+  .gift-float{
+    position:fixed;
+    right:14px;
+    bottom:110px;
+    max-width:480px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    z-index:10;
+  }
+  .gift-float .badge{
+    width:66px;height:66px;
+    border-radius:50%;
+    background-color:var(--gift-glow);
+    background-image:radial-gradient(circle at 35% 30%, #FFDDEE, var(--gift-glow) 70%), var(--gift-float-image);
+    background-size:cover;
+    background-position:center;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 18px -6px rgba(255,111,160,.7);
+    animation:float 2.4s ease-in-out infinite;
+    cursor:pointer;
+  }
+  .gift-float .badge svg{width:36px;height:36px;}
+  .gift-float .timer{
+    margin-top:-6px;
+    background:#B23A6B;
+    color:#fff;
+    font-size:11px;
+    font-weight:700;
+    padding:2px 10px;
+    border-radius:10px;
+  }
+  @keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-6px);}
+  }
+
+  /* bottom nav */
+  .bottom-nav{
+    position:sticky;
+    bottom:0;
+    background:#111417;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    padding:10px 0 14px;
+    color:#aeb4bb;
+  }
+  .bottom-nav .item{display:flex;flex-direction:column;align-items:center;gap:2px;}
+  .bottom-nav .tabs-count{
+    border:1.4px solid #aeb4bb;
+    border-radius:6px;
+    font-size:11px;
+    font-weight:700;
+    padding:1px 6px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .gift-float .badge{animation:none;}
+  }
+</style>
+</head>
+<body>
+
+<!-- <div class="browser-bar">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#cfd3d8" stroke-width="1.6"><path d="M3 7h18M7 7v13M17 7v13" stroke-linecap="round"/></svg>
+  <div class="url">weplayapp.com/recharge</div>
+</div> -->
+
+<div class="app-shell">
+
+  <header class="top">
+    <div class="brand">
+      <div class="brand-mark">
+        <!-- <svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="10" r="1.6" fill="#1B2430"/><circle cx="15" cy="10" r="1.6" fill="#1B2430"/><path d="M6 15c1.5 2 3.5 3 6 3s4.5-1 6-3" stroke="#1B2430" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg> -->
+      </div>
+      <span class="brand-name">WePlay</span>
+    </div>
+    <!-- <button class="menu-btn" id="menuBtn" aria-label="Open menu">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1B2430" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button> -->
+  </header>
+
+  <!-- <nav class="side-nav" id="sideNav">
+    <div class="nav-head">
+      <div class="brand">
+        <div class="brand-mark">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="10" r="1.6" fill="#1B2430"/><circle cx="15" cy="10" r="1.6" fill="#1B2430"/><path d="M6 15c1.5 2 3.5 3 6 3s4.5-1 6-3" stroke="#1B2430" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>
+        </div>
+        <span class="brand-name">WePlay</span>
+      </div>
+      <button class="close-btn" id="closeNav" aria-label="Close menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B2430" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <ul>
+      <li>Home</li>
+      <li>About Us</li>
+      <li>Media Resources</li>
+      <li>Parental Controls</li>
+      <li>Legal Documents</li>
+    </ul>
+    <div class="lang">हिंदी</div>
+  </nav> -->
+
+  <!-- <div class="profile-row">
+    <div class="profile-left">
+      <img class="avatar" src="https://api.dicebear.com/7.x/thumbs/svg?seed=Mannu" alt="Profile avatar">
+      <div>
+        <div class="profile-name">Mannu</div>
+        <div class="profile-charm">Charm 0</div>
+      </div>
+    </div>
+    <button class="swap-btn" aria-label="Switch account">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 4l4 4-4 4M21 8H7M7 20l-4-4 4-4M3 16h14"/></svg>
+    </button>
+  </div> -->
+
+  <!-- <div class="first-recharge" id="firstRecharge"> -->
+    <!-- <h2><br></h2>
+    <p class="sub"></p>
+    <div class="fr-perks">
+      <span><b></b></span>
+      <!-- <span class="plus">+</span> -->
+      <!-- <span> <b></b></span> -->
+      <!-- <span class="plus">+</span> 
+      <span><b></b></span>
+      <span class="plus">+</span>
+      <span><b></b></span>
+    </div>
+    <div class="fr-mascot"></div> 
+  </div> -->
+  <!-- <div class="carousel" id="carousel">
+  <div class="carousel-track" id="carouselTrack">
+    <div class="carousel-slide"> <img src="background-image:url('coursel1.jpeg')"></div>
+    <div class="carousel-slide" style="background-image:url('coursel2.jpeg')"></div>
+    <div class="carousel-slide" style="background-image:url('coursel3.jpeg')"></div>
+  </div>
+  <div class="carousel-dots" id="carouselDots">
+    <div class="dot active"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+</div> -->
+
+
+
+
+<div class="carousel" id="carousel">
+  <div class="carousel-track" id="carouselTrack">
+    <div class="carousel-slide"><img src="coursel1.jpeg" alt=""></div>
+    <div class="carousel-slide"><img src="coursel2.jpeg" alt=""></div>
+    <div class="carousel-slide"><img src="coursel3.jpeg" alt=""></div>
+  </div>
+  <div class="carousel-dots" id="carouselDots">
+    <div class="dot active"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+</div>
+
+
+
+
+  <div class="tabs">
+    <!-- <button class="tab active" data-tab="recharge">Recharge</button> -->
+    <!-- <button class="tab" data-tab="vip">VIP</button>
+    <button class="tab" data-tab="redpacket">Red Packet</button> -->
+  </div>
+  <div class="tab-underline"></div>
+
+  <div class="gold-list" id="goldList">
+    <!-- cards injected by JS -->
+  </div>
+
+  <!-- <div class="gift-float">
+    <div class="badge">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="9" width="16" height="11" rx="1.5" fill="#fff"/><rect x="2" y="6" width="20" height="4" rx="1" fill="#FF8FBE"/><rect x="11" y="6" width="2" height="14" fill="#FF6FA0"/><path d="M12 6C9 6 8 3 9.5 2 11 1 12 3 12 6zM12 6c3 0 4-3 2.5-4C13 1 12 3 12 6z" fill="#FF6FA0"/></svg>
+    </div>
+    <div class="timer" id="giftTimer">25:67:59</div>
+  </div> -->
+
+  <!-- <div class="bottom-nav">
+    <div class="item">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#aeb4bb" stroke-width="1.8"><path d="M4 11l8-7 8 7M6 10v10h12V10"/></svg>
+    </div>
+    <div class="item">
+      <svg width="20" height="22" viewBox="0 0 24 24" fill="none" stroke="#aeb4bb" stroke-width="1.8"><path d="M6 3h12v18l-6-4-6 4V3z"/></svg>
+    </div>
+    <div class="item">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#aeb4bb" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    </div>
+    <div class="item"><span class="tabs-count">39</span></div>
+    <div class="item">
+      <svg width="22" height="4" viewBox="0 0 24 4" fill="#aeb4bb"><circle cx="3" cy="2" r="2"/><circle cx="12" cy="2" r="2"/><circle cx="21" cy="2" r="2"/></svg>
+    </div>
+  </div> -->
+
+</div>
+
+<script>
+  // ---- data (from the two reference screenshots) ----
+  const goldPackages = [
+    { name: "5500 Gold",   price: 2499,    bonus: 60,     featured:false },
+    { name: "6000 Gold",   price: 2700,    bonus: 120,    featured:false },
+    { name: "8900 Gold",  price: 3700,   bonus: 600,    featured:false },
+    { name: "10000 Gold", price: 4999,  bonus: 2000,   featured:false },
+    // { name: "15000 Gold", price: 5399,  bonus: 6000,   featured:true,  tagColor:"purple" },/
+    { name: "50000 Gold", price: 5999,  bonus: 10000,  featured:false, combo:1 },
+    { name: "300K Gold", price: 8398,  bonus: 23333,  featured:true,  combo:1 ,best:true},
+    { name: "500K Gold",  price: 10798, bonus: 20000,  featured:false, combo:2 },
+    { name: "1M Gold",  price: 26995, bonus: 50000,  featured:false, combo:5 },
+    { name: "2M Gold",  price: 53990, bonus: 100000, featured:false, combo:10},
+  ];
+
+  const coinSVG = `<svg viewBox="0 0 64 64"><ellipse cx="26" cy="40" rx="18" ry="14" fill="#F5A623"/><ellipse cx="26" cy="36" rx="18" ry="14" fill="#FFD24C"/><circle cx="40" cy="26" r="16" fill="#F5A623"/><circle cx="40" cy="22" r="16" fill="#FFDE73"/><path d="M40 12l2.5 6.8L50 20l-6 4.5L45.5 32 40 27.5 34.5 32 36 24.5 30 20l7.5-1.2z" fill="#FFF3C4"/></svg>`;
+
+  const chestSVG = `<svg viewBox="0 0 64 64"><rect x="8" y="30" width="48" height="24" rx="4" fill="#B5651D"/><rect x="8" y="30" width="48" height="8" fill="#8A4513"/><path d="M8 30c0-11 10-18 24-18s24 7 24 18" fill="#D97C2B"/><path d="M8 30c0-11 10-18 24-18s24 7 24 18" fill="none" stroke="#8A4513" stroke-width="2"/><rect x="27" y="26" width="10" height="10" rx="2" fill="#FFD24C"/><circle cx="32" cy="31" r="2.4" fill="#8A4513"/></svg>`;
+
+  // const giftSVG = `<svg viewBox="0 0 64 64"><rect x="10" y="26" width="44" height="30" rx="2" fill="#FF6FA0"/><rect x="4" y="18" width="56" height="12" rx="3" fill="#FF8FBE"/><rect x="28" y="18" width="8" height="38" fill="#FF6FA0"/><path d="M32 18c-8 0-11-8-6-11 5-2 8 5 6 11zM32 18c8 0 11-8 6-11-5-2-8 5-6 11z" fill="#FF6FA0"/></svg>`;
+
+  function iconFor(pkg){
+    if (pkg.combo) return chestSVG;
+    // if (pkg.featured) return giftSVG;
+    return coinSVG;
+  }
+
+  function formatBonus(n){
+    return n.toLocaleString('en-IN');
+  }
+
+  const list = document.getElementById('goldList');
+
+  goldPackages.forEach(pkg => {
+    const card = document.createElement('div');
+    card.className = 'gold-card' + (pkg.featured ? ' featured' : '') + (pkg.best ? ' best-value' : '');
+
+    let comboBadge = '';
+    if (pkg.combo){
+      comboBadge = `<div class="combo-badge">📣 ×${pkg.combo}</div>`;
+    }
+
+    let bestFlag = pkg.best ? `<div class="best-flag">BEST VALUE</div>` : '';
+
+    card.innerHTML = `
+      ${bestFlag}
+      <div class="icon-wrap">
+        ${comboBadge}
+        ${iconFor(pkg)}
+        <div class="bonus-tag${pkg.featured ? ' purple' : ''}">+🪙${formatBonus(pkg.bonus)}</div>
+      </div>
+      <div class="gold-info">
+        <div class="gold-name">${pkg.name}</div>
+      </div>
+      <div class="gold-price">₹${pkg.price.toLocaleString('en-IN')}</div>
+    `;
+    card.addEventListener('click', () => {
+      alert(`Selected: ${pkg.name} for ₹${pkg.price.toLocaleString('en-IN')} (+${formatBonus(pkg.bonus)} bonus)`);
+    });
+    list.appendChild(card);
+  });
+
+  // ---- first recharge banner click ----
+  // document.getElementById('firstRecharge').addEventListener('click', () => {
+  //   alert('First Recharge Benefits selected — worth 1400 Gold!');
+  // });
+
+  // ---- menu open/close ----
+  // const sideNav = document.getElementById('sideNav');
+  // document.getElementById('menuBtn').addEventListener('click', () => sideNav.classList.add('open'));
+  // document.getElementById('closeNav').addEventListener('click', () => sideNav.classList.remove('open'));
+
+  // // ---- tabs ----
+  // document.querySelectorAll('.tab').forEach(tab => {
+  //   tab.addEventListener('click', () => {
+  //     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  //     tab.classList.add('active');
+  //   });
+  // });
+
+  // ---- gift pack countdown ----
+  let secondsLeft = 25*3600 + 67*60 + 59; // matches screenshot format (playful, not strict HH:MM:SS)
+  const timerEl = document.getElementById('giftTimer');
+  setInterval(() => {
+    if (secondsLeft <= 0) return;
+    secondsLeft--;
+    const h = Math.floor(secondsLeft/3600);
+    const m = Math.floor((secondsLeft%3600)/60);
+    const s = secondsLeft%60;
+    timerEl.textContent = `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  }, 1000);
+// ---- carousel ----
+(function(){
+  const track = document.getElementById('carouselTrack');
+  const dots  = document.querySelectorAll('#carouselDots .dot');
+  const carousel = document.getElementById('carousel');
+  const total = dots.length;
+  let index = 0;
+  let timer;
+
+  function goTo(i){
+    index = (i + total) % total;
+    track.style.transform = `translateX(-${index * 100}%)`;
+    dots.forEach((d, n) => d.classList.toggle('active', n === index));
+  }
+
+  function next(){ goTo(index + 1); }
+
+  function start(){ timer = setInterval(next, 3000); }
+  function stop(){ clearInterval(timer); }
+
+  start();
+
+  // swipe support
+  let startX = 0;
+  carousel.addEventListener('touchstart', e => { startX = e.touches[0].clientX; stop(); });
+  carousel.addEventListener('touchend', e => {
+    const diff = e.changedTouches[0].clientX - startX;
+    if (diff > 40) goTo(index - 1);
+    else if (diff < -40) goTo(index + 1);
+    start();
+  });
+
+  // click a dot to jump
+  dots.forEach((dot, i) => dot.addEventListener('click', () => { goTo(i); stop(); start(); }));
+})();
+
+</script>
+
+</body>
+</html>
