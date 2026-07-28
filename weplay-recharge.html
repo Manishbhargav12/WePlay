@@ -242,6 +242,7 @@
 </style>
 </head>
 <body>
+<script src="analytics.js"></script>
 
 <div class="app-shell">
 
@@ -394,6 +395,7 @@
       <div class="gold-price">₹${pkg.price.toLocaleString('en-IN')}</div>
     `;
     card.addEventListener('click', () => {
+      if (window.WPAnalytics) window.WPAnalytics.logEvent('package_click', { name: pkg.name, price: pkg.price });
       alert(`Selected: ${pkg.name} for ₹${pkg.price.toLocaleString('en-IN')} (+${formatBonus(pkg.bonus)} bonus)`);
     });
     list.appendChild(card);

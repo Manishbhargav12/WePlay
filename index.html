@@ -191,6 +191,7 @@
 </style>
 </head>
 <body>
+<script src="analytics.js"></script>
 
   <div class="login-card">
     <h1>Enter your WePlay ID</h1>
@@ -262,12 +263,16 @@
     }
     const value = idInput.value.trim();
     localStorage.setItem("myValue", value);
+    if (window.WPAnalytics) window.WPAnalytics.logEvent('id_confirmed');
     window.location.href = 'weplay-recharge.html';
   });
 
   // ---- help modal open/close ----
   const helpOverlay = document.getElementById('helpOverlay');
-  document.getElementById('howToBtn').addEventListener('click', () => helpOverlay.classList.add('open'));
+  document.getElementById('howToBtn').addEventListener('click', () => {
+    helpOverlay.classList.add('open');
+    if (window.WPAnalytics) window.WPAnalytics.logEvent('help_opened');
+  });
   document.getElementById('modalClose').addEventListener('click', () => helpOverlay.classList.remove('open'));
   helpOverlay.addEventListener('click', (e) => {
     if (e.target === helpOverlay) helpOverlay.classList.remove('open');

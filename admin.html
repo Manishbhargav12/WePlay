@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WePlay · Admin</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Mono:wght@400;600&family=Segoe+UI&display=swap');
+
+  :root{
+    --ink:#0E1418;
+    --panel:#161E24;
+    --panel-line:#232E36;
+    --text:#E7ECEF;
+    --text-soft:#8A97A2;
+    --brand-cyan:#12C7D6;
+    --accent-orange:#FF7A1A;
+    --good:#3DDC84;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ink);
+    color:var(--text);
+    font-family:"Segoe UI", Roboto, Arial, sans-serif;
+    min-height:100vh;
+  }
+  .mono{ font-family:"IBM Plex Mono", monospace; }
+  .display{ font-family:"Space Grotesk", sans-serif; }
+
+  /* ---------------- gate screen ---------------- */
+  #gate{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+  }
+  .gate-card{
+    width:100%;
+    max-width:380px;
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    border-radius:20px;
+    padding:32px 28px;
+  }
+  .gate-card .badge{
+    width:44px;height:44px;border-radius:12px;
+    background:linear-gradient(135deg,var(--brand-cyan),#0A8B96);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;color:#03282c;margin-bottom:18px;
+  }
+  .gate-card h1{
+    font-family:"Space Grotesk", sans-serif;
+    font-size:20px;margin:0 0 6px;
+  }
+  .gate-card p{
+    color:var(--text-soft);
+    font-size:13.5px;
+    margin:0 0 22px;
+  }
+  #pwInput{
+    width:100%;
+    background:#0E1418;
+    border:1px solid var(--panel-line);
+    border-radius:10px;
+    padding:12px 14px;
+    color:var(--text);
+    font-size:15px;
+    outline:none;
+    margin-bottom:12px;
+  }
+  #pwInput:focus{ border-color:var(--brand-cyan); }
+  #gateBtn{
+    width:100%;
+    border:none;
+    border-radius:999px;
+    background:var(--brand-cyan);
+    color:#03282c;
+    font-weight:700;
+    font-size:15px;
+    padding:13px 0;
+    cursor:pointer;
+  }
+  #gateBtn:active{ transform:scale(.98); }
+  #gateError{
+    display:none;
+    color:#FF6B6B;
+    font-size:13px;
+    margin-top:10px;
+  }
+
+  /* ---------------- dashboard ---------------- */
+  #dashboard{ display:none; }
+  header.top{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 28px;
+    border-bottom:1px solid var(--panel-line);
+    background:var(--panel);
+  }
+  header.top .title{ display:flex; align-items:center; gap:12px; }
+  header.top .badge{
+    width:36px;height:36px;border-radius:10px;
+    background:linear-gradient(135deg,var(--brand-cyan),#0A8B96);
+  }
+  header.top h1{ font-family:"Space Grotesk", sans-serif; font-size:17px; margin:0; }
+  header.top .sub{ color:var(--text-soft); font-size:12px; }
+  .top-actions{ display:flex; gap:10px; }
+  .btn-ghost{
+    background:transparent;
+    border:1px solid var(--panel-line);
+    color:var(--text-soft);
+    border-radius:8px;
+    padding:8px 14px;
+    font-size:12.5px;
+    cursor:pointer;
+  }
+  .btn-ghost:hover{ border-color:var(--brand-cyan); color:var(--text); }
+
+  main{ padding:26px 28px 60px; max-width:1100px; margin:0 auto; }
+
+  .stat-row{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:14px;
+    margin-bottom:26px;
+  }
+  .stat-card{
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    border-radius:14px;
+    padding:16px 18px;
+  }
+  .stat-card .label{ font-size:11.5px; color:var(--text-soft); text-transform:uppercase; letter-spacing:.5px; }
+  .stat-card .value{ font-family:"IBM Plex Mono", monospace; font-size:26px; font-weight:600; margin-top:6px; }
+  .stat-card .value.cyan{ color:var(--brand-cyan); }
+  .stat-card .value.orange{ color:var(--accent-orange); }
+  .stat-card .value.good{ color:var(--good); }
+
+  .panel{
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    border-radius:16px;
+    padding:20px 22px;
+    margin-bottom:20px;
+  }
+  .panel h2{
+    font-family:"Space Grotesk", sans-serif;
+    font-size:14.5px;
+    margin:0 0 16px;
+    color:var(--text);
+  }
+
+  /* funnel — the signature element, styled as a coin chute narrowing at each stage */
+  .funnel{ display:flex; flex-direction:column; gap:0; }
+  .funnel-stage{
+    display:flex; align-items:center; gap:14px;
+    padding:12px 0;
+    border-bottom:1px dashed var(--panel-line);
+  }
+  .funnel-stage:last-child{ border-bottom:none; }
+  .funnel-bar-wrap{ flex:1; height:10px; background:#0E1418; border-radius:6px; overflow:hidden; }
+  .funnel-bar{
+    height:100%;
+    background:linear-gradient(90deg, var(--brand-cyan), var(--accent-orange));
+    border-radius:6px;
+    transition:width .5s ease;
+  }
+  .funnel-label{ width:150px; font-size:13px; color:var(--text-soft); flex:none; }
+  .funnel-value{ width:60px; text-align:right; font-family:"IBM Plex Mono", monospace; font-size:14px; flex:none; }
+
+  #dailyChart{ width:100%; height:180px; display:block; }
+
+  table{ width:100%; border-collapse:collapse; font-size:13px; }
+  th{
+    text-align:left; color:var(--text-soft); font-weight:600;
+    font-size:11.5px; text-transform:uppercase; letter-spacing:.4px;
+    padding:8px 10px; border-bottom:1px solid var(--panel-line);
+  }
+  td{ padding:9px 10px; border-bottom:1px solid var(--panel-line); color:var(--text); }
+  tr:last-child td{ border-bottom:none; }
+  .pill{
+    display:inline-block; padding:2px 9px; border-radius:999px;
+    font-size:11px; font-weight:600;
+  }
+  .pill.page_view{ background:rgba(18,199,214,.15); color:var(--brand-cyan); }
+  .pill.package_click{ background:rgba(255,122,26,.15); color:var(--accent-orange); }
+  .pill.id_confirmed{ background:rgba(61,220,132,.15); color:var(--good); }
+  .pill.help_opened{ background:rgba(138,147,162,.2); color:var(--text-soft); }
+
+  .empty{ color:var(--text-soft); font-size:13.5px; text-align:center; padding:30px 0; }
+
+  .two-col{ display:grid; grid-template-columns:1.3fr 1fr; gap:20px; }
+
+  @media (max-width:760px){
+    .stat-row{ grid-template-columns:repeat(2,1fr); }
+    .two-col{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ============== password gate ============== -->
+  <div id="gate">
+    <div class="gate-card">
+      <div class="badge display">W</div>
+      <h1>Admin access</h1>
+      <p>Enter the admin password to view site traffic.</p>
+      <input type="password" id="pwInput" placeholder="Password" autocomplete="off">
+      <button id="gateBtn">Unlock</button>
+      <div id="gateError">Incorrect password.</div>
+    </div>
+  </div>
+
+  <!-- ============== dashboard ============== -->
+  <div id="dashboard">
+    <header class="top">
+      <div class="title">
+        <div class="badge"></div>
+        <div>
+          <h1>WePlay Traffic</h1>
+          <div class="sub">Anonymous analytics · this browser's local data</div>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="btn-ghost" id="exportBtn">Export CSV</button>
+        <button class="btn-ghost" id="clearBtn">Clear data</button>
+        <button class="btn-ghost" id="lockBtn">Lock</button>
+      </div>
+    </header>
+
+    <main>
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="label">Total events</div>
+          <div class="value cyan mono" id="statTotal">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Page views</div>
+          <div class="value mono" id="statViews">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">IDs confirmed</div>
+          <div class="value good mono" id="statConfirmed">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Package clicks</div>
+          <div class="value orange mono" id="statClicks">0</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="panel">
+          <h2>Visits — last 14 days</h2>
+          <canvas id="dailyChart"></canvas>
+        </div>
+        <div class="panel">
+          <h2>Conversion funnel</h2>
+          <div class="funnel" id="funnel"></div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="panel">
+          <h2>Most-clicked packages</h2>
+          <table id="packageTable">
+            <thead><tr><th>Package</th><th>Clicks</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="panel">
+          <h2>Device breakdown</h2>
+          <table id="deviceTable">
+            <thead><tr><th>Device</th><th>Views</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Recent activity</h2>
+        <table id="recentTable">
+          <thead><tr><th>Time</th><th>Event</th><th>Page</th><th>Device</th><th>Detail</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+<script>
+/* ============================================================
+   PASSWORD PROTECTION
+   The gate compares a SHA-256 hash of the entered password
+   against ADMIN_PASSWORD_HASH below — the plaintext password
+   is never stored in this file.
+
+   Default password is:  weplay-admin-2026
+
+   TO CHANGE THE PASSWORD:
+   1. Open this file in a browser console and run:
+        crypto.subtle.digest('SHA-256', new TextEncoder().encode('yourNewPassword'))
+          .then(b => console.log(Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')))
+   2. Replace the ADMIN_PASSWORD_HASH value below with the printed string.
+
+   NOTE: this is a static, no-backend page, so this check happens
+   entirely in the visitor's browser. Anyone who can view this file's
+   source can see the hash (not the password). Treat this as basic
+   access control to keep casual visitors out of the dashboard, not
+   as strong security — don't reuse a sensitive password here, and
+   move to a real server-side login if this data ever becomes sensitive.
+   ============================================================ */
+  const ADMIN_PASSWORD_HASH = "7ed8cfd34399e108d19c4a6c0cdb7d70954fd017c23025ce1964e151e4c07802";
+
+  async function sha256(text){
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  const gate = document.getElementById('gate');
+  const dashboard = document.getElementById('dashboard');
+  const pwInput = document.getElementById('pwInput');
+  const gateBtn = document.getElementById('gateBtn');
+  const gateError = document.getElementById('gateError');
+  const SESSION_KEY = 'wp_admin_unlocked';
+
+  async function tryUnlock(){
+    const hash = await sha256(pwInput.value);
+    if (hash === ADMIN_PASSWORD_HASH){
+      sessionStorage.setItem(SESSION_KEY, '1');
+      gateError.style.display = 'none';
+      showDashboard();
+    } else {
+      gateError.style.display = 'block';
+      pwInput.value = '';
+      pwInput.focus();
+    }
+  }
+  gateBtn.addEventListener('click', tryUnlock);
+  pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
+
+  document.getElementById('lockBtn').addEventListener('click', () => {
+    sessionStorage.removeItem(SESSION_KEY);
+    dashboard.style.display = 'none';
+    gate.style.display = 'flex';
+    pwInput.value = '';
+    pwInput.focus();
+  });
+
+  function showDashboard(){
+    gate.style.display = 'none';
+    dashboard.style.display = 'block';
+    renderDashboard();
+  }
+
+  if (sessionStorage.getItem(SESSION_KEY) === '1'){
+    showDashboard();
+  }
+
+  /* ============================================================
+     DASHBOARD RENDERING — reads events from the same localStorage
+     key that analytics.js writes to (wp_analytics_events_v1) on
+     index.html and weplay-recharge.html. This page must be served
+     from the same origin/folder as those pages to see their data.
+     ============================================================ */
+  function getEvents(){
+    try {
+      const raw = localStorage.getItem('wp_analytics_events_v1');
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch(e){ return []; }
+  }
+
+  function fmtTime(ts){
+    const d = new Date(ts);
+    return d.toLocaleString('en-IN', { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+  }
+
+  function renderDashboard(){
+    const events = getEvents().slice().sort((a,b) => b.ts - a.ts);
+
+    const total = events.length;
+    const views = events.filter(e => e.type === 'page_view').length;
+    const confirmed = events.filter(e => e.type === 'id_confirmed').length;
+    const clicks = events.filter(e => e.type === 'package_click').length;
+
+    document.getElementById('statTotal').textContent = total.toLocaleString('en-IN');
+    document.getElementById('statViews').textContent = views.toLocaleString('en-IN');
+    document.getElementById('statConfirmed').textContent = confirmed.toLocaleString('en-IN');
+    document.getElementById('statClicks').textContent = clicks.toLocaleString('en-IN');
+
+    // ---- funnel ----
+    const indexViews = events.filter(e => e.type === 'page_view' && e.page === 'index.html').length;
+    const rechargeViews = events.filter(e => e.type === 'page_view' && e.page === 'weplay-recharge.html').length;
+    const stages = [
+      { label:'Landed on site', value: indexViews },
+      { label:'ID confirmed', value: confirmed },
+      { label:'Reached recharge page', value: rechargeViews },
+      { label:'Clicked a package', value: clicks },
+    ];
+    const maxStage = Math.max(1, ...stages.map(s => s.value));
+    const funnelEl = document.getElementById('funnel');
+    funnelEl.innerHTML = stages.map(s => `
+      <div class="funnel-stage">
+        <div class="funnel-label">${s.label}</div>
+        <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:${(s.value/maxStage*100).toFixed(1)}%"></div></div>
+        <div class="funnel-value mono">${s.value}</div>
+      </div>
+    `).join('');
+
+    // ---- daily chart (last 14 days, page_view events) ----
+    const days = [];
+    for (let i = 13; i >= 0; i--){
+      const d = new Date();
+      d.setHours(0,0,0,0);
+      d.setDate(d.getDate() - i);
+      days.push(d);
+    }
+    const counts = days.map(d => {
+      const next = new Date(d); next.setDate(d.getDate()+1);
+      return events.filter(e => e.type==='page_view' && e.ts >= d.getTime() && e.ts < next.getTime()).length;
+    });
+    drawBarChart('dailyChart', counts, days.map(d => d.toLocaleDateString('en-IN',{day:'numeric',month:'short'})));
+
+    // ---- package table ----
+    const pkgCounts = {};
+    events.filter(e => e.type === 'package_click').forEach(e => {
+      const name = (e.data && e.data.name) || 'Unknown';
+      pkgCounts[name] = (pkgCounts[name] || 0) + 1;
+    });
+    const pkgRows = Object.entries(pkgCounts).sort((a,b) => b[1]-a[1]);
+    const pkgBody = document.querySelector('#packageTable tbody');
+    pkgBody.innerHTML = pkgRows.length ? pkgRows.map(([name,count]) =>
+      `<tr><td>${escapeHtml(name)}</td><td class="mono">${count}</td></tr>`
+    ).join('') : '';
+    if (!pkgRows.length) pkgBody.innerHTML = `<tr><td colspan="2" class="empty">No package clicks yet</td></tr>`;
+
+    // ---- device table ----
+    const devCounts = {};
+    events.filter(e => e.type === 'page_view').forEach(e => {
+      const d = e.device || 'unknown';
+      devCounts[d] = (devCounts[d] || 0) + 1;
+    });
+    const devRows = Object.entries(devCounts).sort((a,b) => b[1]-a[1]);
+    const devBody = document.querySelector('#deviceTable tbody');
+    devBody.innerHTML = devRows.length ? devRows.map(([dev,count]) =>
+      `<tr><td>${escapeHtml(dev)}</td><td class="mono">${count}</td></tr>`
+    ).join('') : `<tr><td colspan="2" class="empty">No views yet</td></tr>`;
+
+    // ---- recent activity ----
+    const recentBody = document.querySelector('#recentTable tbody');
+    const recent = events.slice(0, 40);
+    recentBody.innerHTML = recent.length ? recent.map(e => `
+      <tr>
+        <td class="mono">${fmtTime(e.ts)}</td>
+        <td><span class="pill ${e.type}">${e.type}</span></td>
+        <td>${escapeHtml(e.page || '')}</td>
+        <td>${escapeHtml(e.device || '')}</td>
+        <td>${e.data && e.data.name ? escapeHtml(e.data.name) + (e.data.price ? ' · ₹' + e.data.price : '') : ''}</td>
+      </tr>
+    `).join('') : `<tr><td colspan="5" class="empty">No activity recorded yet on this browser</td></tr>`;
+  }
+
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function drawBarChart(canvasId, values, labels){
+    const canvas = document.getElementById(canvasId);
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    const w = rect.width || 400, h = 180;
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    canvas.style.height = h + 'px';
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0,0,w,h);
+
+    const max = Math.max(1, ...values);
+    const padBottom = 22, padTop = 10;
+    const chartH = h - padBottom - padTop;
+    const barGap = 6;
+    const barW = (w / values.length) - barGap;
+
+    values.forEach((v, i) => {
+      const barH = (v / max) * chartH;
+      const x = i * (barW + barGap) + barGap/2;
+      const y = padTop + (chartH - barH);
+      const grad = ctx.createLinearGradient(0, y, 0, y+barH);
+      grad.addColorStop(0, '#12C7D6');
+      grad.addColorStop(1, '#0A8B96');
+      ctx.fillStyle = v > 0 ? grad : '#232E36';
+      ctx.beginPath();
+      const r = 3;
+      ctx.moveTo(x, y+barH);
+      ctx.lineTo(x, y+r);
+      ctx.arcTo(x, y, x+r, y, r);
+      ctx.lineTo(x+barW-r, y);
+      ctx.arcTo(x+barW, y, x+barW, y+r, r);
+      ctx.lineTo(x+barW, y+barH);
+      ctx.closePath();
+      ctx.fill();
+
+      if (i % 2 === 0 || values.length <= 8){
+        ctx.fillStyle = '#8A97A2';
+        ctx.font = '10px "IBM Plex Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(labels[i], x + barW/2, h - 6);
+      }
+    });
+  }
+
+  // ---- export ----
+  document.getElementById('exportBtn').addEventListener('click', () => {
+    const events = getEvents();
+    const rows = [['timestamp','type','page','device','package_name','package_price','referrer']];
+    events.forEach(e => rows.push([
+      new Date(e.ts).toISOString(),
+      e.type,
+      e.page || '',
+      e.device || '',
+      (e.data && e.data.name) || '',
+      (e.data && e.data.price) || '',
+      e.ref || ''
+    ]));
+    const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type:'text/csv' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'weplay-traffic.csv';
+    a.click();
+  });
+
+  document.getElementById('clearBtn').addEventListener('click', () => {
+    if (confirm('Clear all recorded analytics data on this browser? This cannot be undone.')){
+      localStorage.removeItem('wp_analytics_events_v1');
+      renderDashboard();
+    }
+  });
+</script>
+</script>
+</body>
+</html>
