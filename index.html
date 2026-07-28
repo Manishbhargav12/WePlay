@@ -42,31 +42,6 @@
     font-weight:800;
     margin:0 0 24px;
   }
-  .segmented{
-    display:flex;
-    background:#F2F3F5;
-    border-radius:12px;
-    padding:4px;
-    margin-bottom:34px;
-  }
-  .segmented button{
-    flex:1;
-    border:none;
-    background:transparent;
-    padding:11px 8px;
-    font-size:14px;
-    font-weight:600;
-    color:var(--ink-soft);
-    border-radius:9px;
-    cursor:pointer;
-    transition:background .2s ease, color .2s ease, box-shadow .2s ease;
-  }
-  .segmented button.active{
-    background:#fff;
-    color:var(--ink);
-    font-weight:700;
-    box-shadow:0 3px 8px -3px rgba(20,30,40,.25);
-  }
 
   .id-input-wrap{
     margin-bottom:20px;
@@ -94,7 +69,7 @@
   .help-link{
     display:block;
     text-align:center;
-    margin:8px 0 40px;
+    margin:8px 0 24px;
     font-size:13.5px;
     color:var(--brand-cyan);
     text-decoration:none;
@@ -104,6 +79,34 @@
     width:100%;
   }
   .help-link:hover{text-decoration:underline;}
+
+  /* ---------------- responsibility checkbox ---------------- */
+  .disclaimer-check{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    margin-bottom:10px;
+    cursor:pointer;
+  }
+  .disclaimer-check input[type="checkbox"]{
+    flex:0 0 auto;
+    width:18px;
+    height:18px;
+    margin-top:2px;
+    accent-color:var(--brand-cyan);
+    cursor:pointer;
+  }
+  .disclaimer-check span{
+    font-size:12.5px;
+    line-height:1.5;
+    color:var(--ink-soft);
+  }
+  #checkboxError{
+    display:none;
+    font-size:13px;
+    color:red;
+    margin:0 0 20px;
+  }
 
   .next-btn{
     width:100%;
@@ -119,38 +122,6 @@
   }
   .next-btn:disabled{opacity:.35;cursor:not-allowed;}
   .next-btn:not(:disabled):active{transform:scale(.98);}
-
-  /* scan-code panel (shown when that tab is active) */
-  .scan-panel{
-    display:none;
-    flex-direction:column;
-    align-items:center;
-    padding:20px 0 40px;
-  }
-  .scan-panel .qr-box{
-    width:170px;height:170px;
-    border-radius:16px;
-    background:
-      repeating-linear-gradient(0deg, #1B2430 0 4px, transparent 4px 8px),
-      repeating-linear-gradient(90deg, #1B2430 0 4px, transparent 4px 8px);
-    background-size:100% 8px, 8px 100%;
-    background-blend-mode:multiply;
-    background-color:#fff;
-    border:1px solid var(--line);
-    position:relative;
-  }
-  .scan-panel .qr-box::before{
-    content:"";
-    position:absolute;
-    inset:14px;
-    background:#fff;
-  }
-  .scan-panel p{
-    margin-top:18px;
-    font-size:13.5px;
-    color:var(--ink-soft);
-    text-align:center;
-  }
 
   /* ---------------- help modal ---------------- */
   .modal-overlay{
@@ -224,40 +195,23 @@
   <div class="login-card">
     <h1>Enter your WePlay ID</h1>
 
-    <!-- <div class="segmented">
-      <button id="tabScan">Scan code to login</button>
-      <button id="tabId" class="active">Enter your WePlay ID</button>
-    </div> -->
-
     <div id="idPanel">
       <div class="id-input-wrap">
-        <input type="text" class="id-input" id="idInput" inputmode="numeric" pattern="d{6,12}" placeholder="Double Check Your ID Before Next" required>
-
+        <input type="text" class="id-input" id="idInput" inputmode="numeric" pattern="\d{6,12}" placeholder="Double Check Your ID Before Next" required>
       </div>
       <button class="help-link" id="howToBtn">How to get user ID?</button>
-      <span id="userIdError" style="color:red;display:none;">Invalid WePlay User ID</span>
-      <button class="next-btn" id="nextBtn" disabled onclick="window.location.href='weplay-recharge.html';">Next</button>
-    </div>
+      <span id="userIdError" style="display:none;">Invalid WePlay User ID</span>
 
-    <div class="scan-panel" id="scanPanel">
-      <div class="qr-box"></div>
-      <p>Open the WePlay app and scan this code<br>to log in on this device.</p>
+      <label class="disclaimer-check" for="responsibilityCheck">
+        <input type="checkbox" id="responsibilityCheck" required>
+        <span>I confirm my WePlay ID is correct. I understand that I am fully responsible if I enter an incorrect ID, and WePlay bears no responsibility for recharges sent to a wrong ID.</span>
+      </label>
+      <span id="checkboxError">Please confirm you accept responsibility for entering the correct ID.</span>
+
+      <button class="next-btn" id="nextBtn" disabled>Next</button>
     </div>
   </div>
 
-<!-- 
-<input
-  id="weplayUserId"
-  type="text"
-  
-  
-  placeholder="WePlay User ID (e.g. 201085916)"
-  
-/>
-<span id="userIdError" style="color:red;display:none;">Invalid WePlay User ID</span> -->
-
-
-  
   <!-- ---------------- help modal ---------------- -->
   <div class="modal-overlay" id="helpOverlay">
     <div class="modal">
@@ -279,69 +233,37 @@
     </div>
   </div>
 
-
-
-
-
-
-
-
 <script>
-  // ---- tab switching (Scan / Enter ID) ----
-  // const tabScan = document.getElementById('tabScan');
-  // const tabId   = document.getElementById('tabId');
-  // const idPanel   = document.getElementById('idPanel');
-  // const scanPanel = document.getElementById('scanPanel');
-
-  // function showId(){
-  //   tabId.classList.add('active');
-  //   tabScan.classList.remove('active');
-  //   idPanel.style.display = 'block';
-  //   scanPanel.style.display = 'none';
-  // }
-  // function showScan(){
-  //   tabScan.classList.add('active');
-  //   tabId.classList.remove('active');
-  //   scanPanel.style.display = 'flex';
-  //   idPanel.style.display = 'none';
-  // }
-  // tabId.addEventListener('click', showId);
-  // tabScan.addEventListener('click', showScan);
-
-  // ---- enable Next button once something is typed ----
+  // ---- elements ----
   const idInput = document.getElementById('idInput');
   const nextBtn = document.getElementById('nextBtn');
-  idInput.addEventListener('input', () => {
-    nextBtn.disabled = idInput.value.trim().length ===0
+  const responsibilityCheck = document.getElementById('responsibilityCheck');
+  const checkboxError = document.getElementById('checkboxError');
+
+  // ---- enable Next button only when ID is filled AND checkbox is checked ----
+  function updateNextState(){
+    const hasId = idInput.value.trim().length > 0;
+    nextBtn.disabled = !(hasId && responsibilityCheck.checked);
+  }
+  idInput.addEventListener('input', updateNextState);
+  responsibilityCheck.addEventListener('change', () => {
+    checkboxError.style.display = 'none';
+    updateNextState();
   });
+
   nextBtn.addEventListener('click', () => {
-    if (!nextBtn.disabled){
-      const value = document.getElementById("idInput").value;
-      console.log(value)
-      localStorage.setItem("myValue", value);
-      // alert(`Continuing with WePlay ID: ${idInput.value.trim()}`);
+    // guard: don't proceed without the checkbox, even if the disabled state is somehow bypassed
+    if (!responsibilityCheck.checked){
+      checkboxError.style.display = 'block';
+      return;
     }
+    if (idInput.value.trim().length === 0){
+      return;
+    }
+    const value = idInput.value.trim();
+    localStorage.setItem("myValue", value);
+    window.location.href = 'weplay-recharge.html';
   });
-
-
-  
-
-
-  // uid input validation
-  const input = document.getElementById('idInput');
-  const error = document.getElementById('userIdError');
-
-  // function validateWePlayUserId(id) {
-  //   if (!id) return false;
-  //   // only digits, length 6–12 (adjust if you see longer IDs)
-  //   return /^d{6,12}$/.test(id);
-  // }
-
-  // input.addEventListener('input', () => {
-  //   const valid = validateWePlayUserId(input.value.trim());
-  //   error.style.display = valid ? 'none' : 'block';
-  //   input.setCustomValidity(valid ? '' : 'Invalid WePlay User ID');
-  // });
 
   // ---- help modal open/close ----
   const helpOverlay = document.getElementById('helpOverlay');
