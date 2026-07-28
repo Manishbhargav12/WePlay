@@ -316,9 +316,15 @@
   });
   nextBtn.addEventListener('click', () => {
     if (!nextBtn.disabled){
+      const value = document.getElementById("idInput").value;
+      console.log(value)
+      localStorage.setItem("myValue", value);
       // alert(`Continuing with WePlay ID: ${idInput.value.trim()}`);
     }
   });
+
+
+  
 
 
   // uid input validation
