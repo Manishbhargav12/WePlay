@@ -491,9 +491,9 @@
       </div>
       <span class="brand-name">WePlay</span>
     </div>
-    <!-- <button class="menu-btn" id="menuBtn" aria-label="Open menu">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1B2430" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-    </button> -->
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu">
+      <h1 id="user_id"></h1>
+    </button>
   </header>
 
   <!-- <nav class="side-nav" id="sideNav">
@@ -718,6 +718,9 @@
     track.style.transform = `translateX(-${index * 100}%)`;
     dots.forEach((d, n) => d.classList.toggle('active', n === index));
   }
+
+  const value = localStorage.getItem("myValue");
+    document.getElementById("user_id").textContent = value;
 
   function next(){ goTo(index + 1); }
 
